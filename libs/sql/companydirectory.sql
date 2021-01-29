@@ -60,7 +60,7 @@ INSERT INTO `location` (`id`, `name`) VALUES
 
 -- Dumping structure for table companydirectory.personnel
 CREATE TABLE IF NOT EXISTS `personnel` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `firstName` varchar(50) DEFAULT NULL,
   `lastName` varchar(50) DEFAULT NULL,
   `jobTitle` varchar(50) DEFAULT NULL,
