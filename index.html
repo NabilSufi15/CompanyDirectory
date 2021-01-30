@@ -19,7 +19,8 @@
   </head>
   <body>
     <!-- Nav Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-2">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="#">Company Directory</a>
       <button
         class="navbar-toggler"
@@ -42,7 +43,7 @@
               data-toggle="modal"
               data-target="#addEmployeeModal"
             >
-              Add Employee</i>
+              Add Employee
             </button>
           </li>
           <li class="nav-item">
@@ -52,7 +53,7 @@
               data-toggle="modal"
               data-target="#addDepartmentModal"
             >
-              Add Department</i>
+              Add Department
             </button>
           </li>
           <li class="nav-item">
@@ -62,9 +63,10 @@
               data-toggle="modal"
               data-target="#addLocationModal"
             >
-              Add Location</i>
+              Add Location
             </button>
           </li>
+
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
@@ -96,19 +98,20 @@
             class="form-control mr-sm-2"
             type="search"
             placeholder="Search"
+            aria-label="Search"
           />
         </form>
       </div>
     </nav>
 
+    <!-- Container -->
     <div class="container row col-lg-12">
       <div class="filter col-lg-2">
         <div class="card">
           <div class="card-header">
             <p>Filter</p>
           </div>
-          <div class="card-body">
-          </div>
+          <div class="card-body"></div>
         </div>
       </div>
       <div class="col-lg-10">
@@ -185,35 +188,52 @@
           <div class="modal-body">
             <form class="needs-validation" novalidate>
               <div class="form-group">
-                <label for="first-name" class="col-form-label">First Name:</label>
-                <input type="text" class="form-control" id="first-name" required />
+                <label for="first-name" class="col-form-label"
+                  >First Name:</label
+                >
+                <input
+                  type="text"
+                  class="form-control first-name"
+                  required
+                />
                 <div class="invalid-feedback">Please enter your First Name</div>
               </div>
               <div class="form-group">
                 <label for="last-name" class="col-form-label">Last Name:</label>
-                <input type="text" class="form-control" id="last-name" required />
+                <input
+                  type="text"
+                  class="form-control last-name"
+                  required
+                />
                 <div class="invalid-feedback">Please enter your Last Name</div>
               </div>
               <div class="form-group">
                 <label for="email" class="col-form-label">Email:</label>
-                <input type="text" class="form-control" id="email" required />
+                <input type="text" class="form-control email" required />
                 <div class="invalid-feedback">Please enter your Email</div>
               </div>
               <div class="form-group">
                 <label for="email" class="col-form-label">Job Title:</label>
-                <input type="text" class="form-control" id="job-title" required />
+                <input
+                  type="text"
+                  class="form-control job-title"
+                  required
+                />
                 <div class="invalid-feedback">Please enter your Job Title</div>
               </div>
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                  <label class="input-group-text" for="department">Department</label>
+                  <label class="input-group-text" for="department"
+                    >Department</label
+                  >
                 </div>
                 <select
                   class="custom-select custom-select-department"
-                  id="department"
                   required
                 >
-                  <option selected disabled value="">Select a Department...</option>
+                  <option selected disabled value="">
+                    Select a Department...
+                  </option>
                 </select>
                 <div class="invalid-feedback">Please select a Department</div>
               </div>
@@ -239,7 +259,7 @@
       </div>
     </div>
 
-    <!--Register Modal -->
+    <!--Add Employee Modal -->
     <div
       class="modal fade"
       id="addEmployeeModal"
@@ -264,35 +284,37 @@
           <div class="modal-body">
             <form class="needs-validation" novalidate>
               <div class="form-group">
-                <label for="first-name" class="col-form-label">First Name:</label>
-                <input type="text" class="form-control" id="first-name" required />
+                <label for="first-name" class="col-form-label"
+                  >First Name:</label
+                >
+                <input type="text" class="form-control first-name" required />
                 <div class="invalid-feedback">Please enter your First Name</div>
               </div>
               <div class="form-group">
                 <label for="last-name" class="col-form-label">Last Name:</label>
-                <input type="text" class="form-control" id="last-name" required />
+                <input type="text" class="form-control last-name" required />
                 <div class="invalid-feedback">Please enter your Last Name</div>
               </div>
               <div class="form-group">
                 <label for="email" class="col-form-label">Email:</label>
-                <input type="text" class="form-control" id="email" required />
+                <input type="text" class="form-control email" required />
                 <div class="invalid-feedback">Please enter your Email</div>
               </div>
               <div class="form-group">
                 <label for="email" class="col-form-label">Job Title:</label>
-                <input type="text" class="form-control" id="job-title" required />
+                <input type="text" class="form-control job-title" required />
                 <div class="invalid-feedback">Please enter your Job Title</div>
               </div>
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                  <label class="input-group-text" for="department">Department</label>
+                  <label class="input-group-text" for="department"
+                    >Department</label
+                  >
                 </div>
-                <select
-                  class="custom-select custom-select-department"
-                  id="department"
-                  required
-                >
-                  <option selected disabled value="">Select a Department...</option>
+                <select class="custom-select custom-select-department" required>
+                  <option selected disabled value="">
+                    Select a Department...
+                  </option>
                 </select>
                 <div class="invalid-feedback">Please select a Department</div>
               </div>
@@ -304,11 +326,7 @@
                 >
                   Cancel
                 </button>
-                <button
-                  id="add-employee"
-                  type="submit"
-                  class="btn btn-primary"
-                >
+                <button id="add-employee" type="submit" class="btn btn-primary">
                   Add
                 </button>
               </div>
@@ -346,7 +364,12 @@
                 <label for="department-name" class="col-form-label"
                   >Department Name:</label
                 >
-                <input type="text" class="form-control" id="department-name" required />
+                <input
+                  type="text"
+                  class="form-control"
+                  id="department-name"
+                  required
+                />
                 <div class="invalid-feedback">Please enter department name</div>
               </div>
               <div class="input-group mb-3">
@@ -355,7 +378,11 @@
                     >Location</label
                   >
                 </div>
-                <select class="custom-select custom-select-location" id="select-location" required>
+                <select
+                  class="custom-select custom-select-location"
+                  id="select-location"
+                  required
+                >
                   <option selected disabled value="">Select Location...</option>
                 </select>
                 <div class="invalid-feedback">Please select a location</div>
@@ -373,12 +400,11 @@
                   type="submit"
                   class="btn btn-primary"
                 >
-                Add
+                  Add
                 </button>
               </div>
             </form>
           </div>
-          
         </div>
       </div>
     </div>
@@ -411,7 +437,12 @@
                 <label for="first-name" class="col-form-label"
                   >Location Name:</label
                 >
-                <input type="text" class="form-control" id="location-name" required/>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="location-name"
+                  required
+                />
                 <div class="invalid-feedback">Please select a location</div>
               </div>
               <div class="modal-footer">
@@ -422,12 +453,8 @@
                 >
                   Cancel
                 </button>
-                <button
-                  id="add-location"
-                  type="submit"
-                  class="btn btn-primary"
-                >
-                Add
+                <button id="add-location" type="submit" class="btn btn-primary">
+                  Add
                 </button>
               </div>
             </form>
@@ -435,8 +462,6 @@
         </div>
       </div>
     </div>
-    
-
     <script src="libs/js//jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="libs/js/script.js"></script>

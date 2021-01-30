@@ -17,17 +17,18 @@ $(document).ready(function () {
                 console.log(result);
 
                 for (let i = 0; i < result['data'].length; i++) {
-                    // col-sm-12 col-md-6 col-lg-4
-                    $('#info').append('<div id="employee-card" class="col-sm-12 col-md-6 col-lg-3 card m-3"> ' +
-                        '<div class="card-header card-title"><strong>' + result['data'][i].firstName + ' ' + result['data'][i].lastName + '</strong></div>' +
+                    $('#info').append('<div class="col-sm-12 col-md-6 col-lg-3 card m-3" data-role="employee-details"> ' +
+                        '<div class="card-title card-header"><strong>' + result['data'][i].firstName + ' ' + result['data'][i].lastName + '</strong></div>' +
                         '<div class="card-body">' +
-                        '<div id="info-dep" class="card-title">' + '<strong>Department: </strong>' + result['data'][i].department + '</div>' +
-                        '<div class="card-title">' + '<strong>Email: </strong>' + result['data'][i].email + '</strong></div>' +
+                        '<div class="card-title">' + '<strong>Department: </strong>' + result['data'][i].department + '</div>' +
+                        '<div class="card-title">' + '<strong>Email: </strong>' + result['data'][i].email + '</div>' +
                         '<div class="card-title">' + '<strong>Location: </strong>' + result['data'][i].location + '</strong></div>' +
-                        '<button type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light trashButton" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash"></i></button>' +
-                        '<button type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light editButton" data-toggle="modal" data-target="#updateModal"><i class="far fa-edit"></i></button>' +
+                        '<button type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light trash-button float-right" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash"></i></button>' +
+                        '<button id="test" type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light edit-button float-right" data-toggle="modal" data-target="#updateModal"><i class="far fa-edit"></i></button>' +
                         '</div>');
                 }
+
+
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -36,19 +37,11 @@ $(document).ready(function () {
         });
     }
 
-    // $("#search").on("keyup", function () {
-    //     var value = $(this).val().toLowerCase();
-    //     $("#info").filter(function () {
-    //         $('.card').toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    //         console.log(value);
-    //     });
-    // });
-
     //search function
-    $("#search").on("keyup", function() {
+    $("#search").on("keyup", function () {
         var value = $(this).val().toLowerCase();
-        $("#info div").filter(function() {
-            $(this).toggle($(this).find('strong').text().toLowerCase().indexOf(value) > -1)
+        $('div[data-role="employee-details"]').filter(function () {
+            $(this).toggle($(this).find('.card-title').text().toLowerCase().indexOf(value) > -1)
         });
     });
 
@@ -156,7 +149,7 @@ $(document).ready(function () {
         });
     }
 
-    //display employee details within edit modal
+    //display employee details within update employee modal
     const showEmployeeDetails = (id) => {
         $.ajax({
             url: "libs/php/getEmployeeByID.php",
@@ -167,10 +160,10 @@ $(document).ready(function () {
             },
             success: function (result) {
                 console.log(result);
-                $('#updateModal #first-name').val(result['data'][0].firstName);
-                $('#updateModal #last-name').val(result['data'][0].lastName);
-                $('#updateModal #email').val(result['data'][0].email);
-                $('#updateModal #job-title').val(result['data'][0].jobTitle);
+                $('#updateModal .first-name').val(result['data'][0].firstName);
+                $('#updateModal .last-name').val(result['data'][0].lastName);
+                $('#updateModal .email').val(result['data'][0].email);
+                $('#updateModal .job-title').val(result['data'][0].jobTitle);
                 $('#updateModal .custom-select-department').val(result['data'][0].departmentID);
 
             },
@@ -220,7 +213,6 @@ $(document).ready(function () {
 
                 for (let i = 0; i < result['data'].length; i++) {
                     $('.custom-select-location').append('<option value=' + result['data'][i].id + '>' + result['data'][i].name + '</option>');
-                    //$('.custom-select-location').append('<option value=' + [i] + '>' + result['data'][i].name + '</option>');
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -257,16 +249,15 @@ $(document).ready(function () {
                 //col-lg-6 col-md-6 col-12 
                 for (let i = 0; i < result['data'].length; i++) {
                     // col-sm-12 col-md-6 col-lg-4
-                    $('#info').append('<div class="col-sm-12 col-md-6 col-lg-3 card m-3"> ' +
+                    $('#info').append('<div class="col-sm-12 col-md-6 col-lg-3 card m-3" data-role="employee-details"> ' +
                         '<div class="card-header card-title"><strong>' + result['data'][i].firstName + ' ' + result['data'][i].lastName + '</strong></div>' +
                         '<div class="card-body">' +
-                        '<div id="user-d" class="card-title">' + '<strong>Department: </strong>' + result['data'][i].department + '</div>' +
+                        '<div id="info-dep" class="card-title">' + '<strong>Department: </strong>' + result['data'][i].department + '</div>' +
                         '<div class="card-title">' + '<strong>Email: </strong>' + result['data'][i].email + '</div>' +
                         '<div class="card-title">' + '<strong>Location: </strong>' + result['data'][i].location + '</div>' +
-                        '<button type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light trashButton" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash"></i></button>' +
-                        '<button type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light editButton" data-toggle="modal" data-target="#updateModal"><i class="far fa-edit"></i></button>' +
+                        '<button type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light trash-button" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash"></i></button>' +
+                        '<button type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light edit-button" data-toggle="modal" data-target="#updateModal"><i class="far fa-edit"></i></button>' +
                         '</div>');
-
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -278,6 +269,7 @@ $(document).ready(function () {
     //sorts the list of record into a certain order
     $(".nav-item .dropdown-item").click(function () {
         $("#info").empty();
+        console.log($(".form-check-input:checkbox:checked").length);
         sortValue = $(this).attr('data-value');
 
         if ($(".form-check-input:checkbox:checked").length > 0) {
@@ -285,19 +277,19 @@ $(document).ready(function () {
             console.log("ye");
             filterDepartment(
                 sortValue,
-                tmp[0],
-                tmp[1],
-                tmp[2],
-                tmp[3],
-                tmp[4],
-                tmp[5],
-                tmp[6],
-                tmp[7],
-                tmp[8],
-                tmp[9],
-                tmp[10],
-                tmp[11],
-                tmp[12],
+                checkbox[0],
+                checkbox[1],
+                checkbox[2],
+                checkbox[3],
+                checkbox[4],
+                checkbox[5],
+                checkbox[6],
+                checkbox[7],
+                checkbox[8],
+                checkbox[9],
+                checkbox[10],
+                checkbox[11],
+                checkbox[12],
             );
         }
         else {
@@ -309,6 +301,7 @@ $(document).ready(function () {
 
     //checks if the checkbox has been checked and filters results
     $(document).on('click', '.form-check-input', function () {
+        $("#info").empty();
         var checked = $(this).val();
 
         if ($(this).is(':checked')) {
@@ -359,21 +352,21 @@ $(document).ready(function () {
 
     //adds employee into the databse when submitted
     $("#add-employee").click(function () {
-        console.log($('#addEmployeeModal #first-name').val());
-        console.log($('#addEmployeeModal #last-name').val());
-        console.log($('#addEmployeeModal #email').val());
-        console.log($('#addEmployeeModal #job-title').val());
+        console.log($('#addEmployeeModal .first-name').val());
+        console.log($('#addEmployeeModal .last-name').val());
+        console.log($('#addEmployeeModal .email').val());
+        console.log($('#addEmployeeModal .job-title').val());
         console.log($('#addEmployeeModal .custom-select-department').val());
 
-        addEmployee($('#addEmployeeModal #first-name').val(),
-            $('#addEmployeeModal #last-name').val(),
-            $('#addEmployeeModal #email').val(),
-            $('#addEmployeeModal #job-title').val(),
+        addEmployee($('#addEmployeeModal .first-name').val(),
+            $('#addEmployeeModal .last-name').val(),
+            $('#addEmployeeModal .email').val(),
+            $('#addEmployeeModal .job-title').val(),
             $('#addEmployeeModal .custom-select-department').val()
         );
     });
 
-    //adds employee into the database when submitted
+    //adds department into the database when submitted
     $("#add-department").click(function () {
         console.log($('#addDepartmentModal #department-name').val());
         console.log($('#addDepartmentModal .custom-select-location').val());
@@ -392,24 +385,30 @@ $(document).ready(function () {
         );
     });
 
+    //shows employee details within update modal box
+    $(document).on('click', '.edit-button', function () {
+        console.log($(this).data('id'));
+        showEmployeeDetails($(this).data('id'));
+    });
+
     //updates employee into the database when submitted
     $("#updateModal").on('shown.bs.modal', function (e) {
         // console.log("off");
         const updateId = $(e.relatedTarget).data('id');
 
         $("#update-employee").click(function (e) {
-            console.log($('#updateModal #first-name').val());
-            console.log($('#updateModal #last-name').val());
-            console.log($('#updateModal #email').val());
-            console.log($('#updateModal #job-title').val());
+            console.log($('#updateModal .first-name').val());
+            console.log($('#updateModal .last-name').val());
+            console.log($('#updateModal .email').val());
+            console.log($('#updateModal .job-title').val());
             console.log($('#updateModal .custom-select-department').val());
             console.log("id: " + updateId);
 
             updateEmployeeDetails(updateId,
-                $('#updateModal #first-name').val(),
-                $('#updateModal #last-name').val(),
-                $('#updateModal #email').val(),
-                $('#updateModal #job-title').val(),
+                $('#updateModal .first-name').val(),
+                $('#updateModal .last-name').val(),
+                $('#updateModal .email').val(),
+                $('#updateModal .job-title').val(),
                 $('#updateModal .custom-select-department').val()
             );
 
