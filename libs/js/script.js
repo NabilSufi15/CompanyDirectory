@@ -28,7 +28,7 @@ $(document).ready(function () {
 
                 for (let i = 0; i < result['data'].length; i++) {
                     $('#info').append('<div id="employee' + result['data'][i].id + '" class="col-sm-12 col-md-6 col-lg-4 mt-3" data-role="employee-details"> ' +
-                        '<div class="card" data-role="employee-details"> ' +
+                        '<div class="card"> ' +
                         '<div class="card-title font-weight-bold card-header text-center info-text">' + result['data'][i].firstName + ' ' + result['data'][i].lastName + '</div>' +
                         '<div class="card-body">' +
                         '<div class="card-text info-text m-1">' + '<strong>Department: </strong>' + result['data'][i].department + '</div>' +
@@ -40,16 +40,6 @@ $(document).ready(function () {
                         '</div>' +
                         '</div>');
                 }
-
-                // for (let i = 0; i < Object.keys(result['data']).length; i++) {
-                //     $("#info").append('<div id="card-employee" class="col-sm-12 col-md-6 col-lg-4"><div id="employee-card" class="card bg-dark m-1"><div class="card-header text-center"><h4 class="card-title text-light">'
-                //         + result['data'][i]['lastName'] + " " + result['data'][i]['firstName']
-                //         + '</h4></div><div class="card-body bg-secondary"><ul class="list-group list-group-flash"><li class="list-group-item bg-dark text-light"><strong>Job Title: </strong>'
-                //         + (result['data'][i]['jobTitle'] == "" ? "Unknown" : result['data'][i]['jobTitle']) + '</li><li class="list-group-item bg-dark text-light"><strong>Email: </strong>' + result['data'][i]['email']
-                //         + '</li><li class="list-group-item bg-dark text-light"><strong>Department:   </strong>' + result['data'][i]['department'] + '</li><li class="list-group-item bg-dark text-light"><strong>City:   </strong>'
-                //         + result['data'][i]['location'] + '</li></ul></div><div class="card-footer"><button id="btn-more" value="'
-                //         + result['data'][i]['lastName'] + " " + result['data'][i]['firstName'] + '" type="button" class="btn btn-success btn-md">Options</button></div></div></div>');
-                // }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // console.log(jqXHR, textStatus, errorThrown);
@@ -278,7 +268,7 @@ $(document).ready(function () {
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                // console.log(jqXHR, textStatus, errorThrown);
+                console.log(jqXHR, textStatus, errorThrown);
             }
         });
     }
@@ -499,7 +489,7 @@ $(document).ready(function () {
     $("#load-department").click(function () {
         $(".nav-sort-item .nav-link").addClass("disabled");
         $('.checkbox-list').prop('disabled', true);
-        console.log("load department");
+
         $.ajax({
             url: "libs/php/getDepartmentDetails.php",
             type: 'GET',
@@ -514,7 +504,7 @@ $(document).ready(function () {
                 // console.log(result);
                 for (let i = 0; i < result['data'].length; i++) {
                     $('#info').append('<div id="department' + result['data'][i].id + '" class="col-sm-12 col-md-6 col-lg-4 mt-3" data-role="department-details"> ' +
-                        '<div class="card" data-role="employee-details"> ' +
+                        '<div class="card"> ' +
                         '<div class="card-title card-header font-weight-bold text-center info-text">' + result['data'][i].department + '</div>' +
                         '<div class="card-body">' +
                         '<div class="card-text info-text m-1">' + '<strong>Location: </strong>' + result['data'][i].location + '</strong></div>' +
@@ -553,7 +543,7 @@ $(document).ready(function () {
 
                 for (let i = 0; i < result['data'].length; i++) {
                     $('#info').append('<div id="location' + result['data'][i].id + '" class="col-sm-12 col-md-6 col-lg-4 mt-3" data-role="location-details"> ' +
-                        '<div class="card" data-role="employee-details"> ' +
+                        '<div class="card"> ' +
                         '<div class="card-title card-header font-weight-bold text-center info-text">' + result['data'][i].name + '</div>' +
                         '<div class="card-body">' +
                         '<div class="card-text info-text m-1">' + '<strong>Department: </strong>' + result['data'][i].department + '</strong></div>' +
@@ -573,45 +563,41 @@ $(document).ready(function () {
 
     //shows employee details within update modal box
     $(document).on('click', '[data-role="employee-details"] .edit-button', function () {
-        // console.log($(this).data('id'));
         showEmployeeDetails($(this).data('id'));
     });
 
     //shows department details within update modal box
     $(document).on('click', '[data-role="department-details"] .edit-button', function () {
-        // console.log($(this).data('id'));
         showDepartmentDetails($(this).data('id'));
     });
 
     //shows location details within update modal box
     $(document).on('click', '[data-role="location-details"] .edit-button', function () {
-        // console.log($(this).data('id'));
         showLocationDetails($(this).data('id'));
     });
 
-    //deletes employee from the database when submitted
+    //deletes data from the database when submitted
     $("#deleteModal").on('shown.bs.modal', function (e) {
-        // console.log("off");
         deleteId = $(e.relatedTarget).data('id');
 
+        //deletes employee from the database when submitted
         if (employee) {
             $("#delete-record").removeClass("delete-location");
             $("#delete-record").removeClass("delete-department");
             $("#delete-record").addClass("delete-employee");
 
-            console.log("employee modal");
             $(".delete-employee").click(function () {
                 deleteEmployee(deleteId);
                 $(`#employee${deleteId}`).modal('hide');
                 $("#load-employee").click();
             });
 
+            //deletes department from the database when submitted
         } else if (department) {
             $("#delete-record").removeClass("delete-employee");
             $("#delete-record").removeClass("delete-location");
             $("#delete-record").addClass("delete-department");
 
-            console.log("department modal")
             $(".delete-department").click(function () {
                 deleteDepartment(deleteId);
                 $(`#department${deleteId}`).modal('hide');
@@ -619,12 +605,12 @@ $(document).ready(function () {
                 displayAllDepartments();
             });
 
+            //deletes location from the database when submitted
         } else if (location) {
             $("#delete-record").removeClass("delete-employee");
             $("#delete-record").removeClass("delete-department");
             $("#delete-record").addClass("delete-location");
 
-            console.log("location modal")
             $(".delete-location").click(function () {
                 deleteLocation(deleteId);
                 $(`#location${deleteId}`).modal('hide');
@@ -684,7 +670,7 @@ $(document).ready(function () {
 
     //adds location into the database when submitted
     $("#add-location").click(function () {
-        console.log($('#addLocationModal .location-name').val());
+        // console.log($('#addLocationModal .location-name').val());
 
         if ($('#addLocationModal .location-name').val() !== "") {
 
@@ -723,9 +709,9 @@ $(document).ready(function () {
                 );
 
                 $('#updateEmployeeModal').modal('hide');
+                displayAllEmployees(sortValue);
             }
 
-            displayAllEmployees(sortValue);
         });
     });
 
@@ -769,10 +755,8 @@ $(document).ready(function () {
                 );
 
                 $('#updateLocationModal').modal('hide');
-                e.preventDefault();
+                $("#load-location").click();
             }
-
-            $("#load-location").click();
         });
     });
 

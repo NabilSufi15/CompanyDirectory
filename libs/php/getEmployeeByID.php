@@ -32,7 +32,7 @@
 
 	}	
 
-	$query = 'SELECT id, lastName, firstName, jobTitle, email, departmentID FROM personnel WHERE id = ' . $_REQUEST['id'];
+	$query = 'SELECT id, firstName, lastName, jobTitle, email, departmentID FROM personnel WHERE id = ' . $_REQUEST['id'];
 
 	$result = $conn->query($query);
 	
