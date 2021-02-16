@@ -32,7 +32,12 @@
 
 	}	
 
-	$query = 'SELECT p.id, p.lastName, p.firstName, p.jobTitle, p.email, d.name as department, l.name as location FROM personnel p LEFT JOIN department d ON (d.id = p.departmentID) LEFT JOIN location l ON (l.id = d.locationID) ORDER BY ' . $_REQUEST['sort'];
+	$query = '
+	SELECT d.id as id, d.name as department, l.name as location, COUNT(p.id) as employee from department d
+	LEFT JOIN personnel p ON p.departmentID = d.id
+	LEFT JOIN location l ON l.id = d.locationID
+	GROUP BY d.name
+	';
 
 	$result = $conn->query($query);
 	

@@ -32,12 +32,6 @@
 
 	}
 	$query = 'UPDATE personnel SET firstName = ' . '"' . $_REQUEST['first'] . '"' . ', lastName =' . '"' . $_REQUEST['last'] . '"' . ', email =' . '"' . $_REQUEST['email'] . '"' . ', jobTitle =' . '"' . $_REQUEST['job'] . '"' . ', departmentID =' . $_REQUEST['depID'] . ' WHERE id =' . $_REQUEST['id'];
-
-	//$query = 'UPDATE personnel SET firstName = ' . '"wpdsadsrks"' . ', lastName =' . '"dsadsa"' . ', email =' . '"dasdas"' . ', jobTitle =' . '"dadsadasdsaasd"' . ', departmentID =' . 6 . ' WHERE id =' . 7;
-	// $query = 'UPDATE personnel SET firstName = ' . $_REQUEST['first'] . ', lastName = ' . $_REQUEST['last'] . ', email = ' . $_REQUEST['email'] . ', jobTitle = ' . $_REQUEST['job'] . ', departmentID = ' . $_REQUEST['depID'] . ' WHERE id = ' . $_REQUEST['id'];
-	// $query = 'UPDATE personnel SET firstName = ' . $_REQUEST['first'] . ', lastName = ' . $_REQUEST['last'] . ', email = ' . $_REQUEST['email'] . ', jobTitle = ' . $_REQUEST['job'] . ', departmentID = ' . $_REQUEST['depID'] . ' WHERE id = ' . $_REQUEST['id'];
-	// 'UPDATE personnel SET firstName = ' . $_REQUEST['firstName'] . ', lastName = ' . $_REQUEST['lastName'] . ', email = ' . $_REQUEST['email'] . ', jobTitle = ' . $_REQUEST['jobTitle'] . ', departmentID = ' . $_REQUEST['departmentID'] . ' WHERE id = ' . $_REQUEST['id'];
-	// $query = 'UPDATE personnel SET firstName ="' . $_REQUEST['firstName'] . '",lastName ="' . $_REQUEST['lastName'] . '",email ="'  . $_REQUEST['email'] . '",jobTitle ="' . $_REQUEST['jobTitle'] . '",departmentID =' . $_REQUEST['departmentID'] . 'WHERE id =' . $_REQUEST['id'];
 	
 
 	$result = $conn->query($query);

@@ -1,11 +1,15 @@
 $(document).ready(function () {
 
     //global variables
-    let sortValue = $(".nav-item .dropdown-item").attr('data-value');
+    let sortValue = $(".nav-sort-item .dropdown-item").attr('data-value');
     let checkbox = [];
+    let employee = true;
+    let department = false;
+    let location = false;
+    let deleteId;
 
     //displays all employees
-    const getAll = (sortName) => {
+    const displayAllEmployees = (sortName) => {
         $.ajax({
             url: "libs/php/getAllEmployees.php",
             type: 'GET',
@@ -14,34 +18,64 @@ $(document).ready(function () {
                 sort: sortName
             },
             success: function (result) {
-                console.log(result);
+                // console.log(result);
+                // console.log(`employee = ${employee}, department = ${department}, location = ${location}`)
+
+                $("#info").empty();
+                employee = true;
+                department = false;
+                location = false;
 
                 for (let i = 0; i < result['data'].length; i++) {
-                    $('#info').append('<div class="col-sm-12 col-md-6 col-lg-3 card m-3" data-role="employee-details"> ' +
-                        '<div class="card-title card-header"><strong>' + result['data'][i].firstName + ' ' + result['data'][i].lastName + '</strong></div>' +
+                    $('#info').append('<div id="employee' + result['data'][i].id + '" class="col-sm-12 col-md-6 col-lg-4 mt-3" data-role="employee-details"> ' +
+                        '<div class="card" data-role="employee-details"> ' +
+                        '<div class="card-title font-weight-bold card-header text-center info-text">' + result['data'][i].firstName + ' ' + result['data'][i].lastName + '</div>' +
                         '<div class="card-body">' +
-                        '<div class="card-title">' + '<strong>Department: </strong>' + result['data'][i].department + '</div>' +
-                        '<div class="card-title">' + '<strong>Email: </strong>' + result['data'][i].email + '</div>' +
-                        '<div class="card-title">' + '<strong>Location: </strong>' + result['data'][i].location + '</strong></div>' +
-                        '<button type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light trash-button float-right" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash"></i></button>' +
-                        '<button id="test" type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light edit-button float-right" data-toggle="modal" data-target="#updateModal"><i class="far fa-edit"></i></button>' +
+                        '<div class="card-text info-text m-1">' + '<strong>Department: </strong>' + result['data'][i].department + '</div>' +
+                        '<div class="card-text info-text m-1">' + '<strong>Email: </strong>' + result['data'][i].email + '</div>' +
+                        '<div class="card-text info-text m-1">' + '<strong>Location: </strong>' + result['data'][i].location + '</strong></div>' +
+                        '<button type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light trash-button float-right m-1" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash"></i></button>' +
+                        '<button type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light edit-button float-right m-1" data-toggle="modal" data-target="#updateEmployeeModal"><i class="far fa-edit"></i></button>' +
+                        '</div>' +
+                        '</div>' +
                         '</div>');
                 }
 
-
-
+                // for (let i = 0; i < Object.keys(result['data']).length; i++) {
+                //     $("#info").append('<div id="card-employee" class="col-sm-12 col-md-6 col-lg-4"><div id="employee-card" class="card bg-dark m-1"><div class="card-header text-center"><h4 class="card-title text-light">'
+                //         + result['data'][i]['lastName'] + " " + result['data'][i]['firstName']
+                //         + '</h4></div><div class="card-body bg-secondary"><ul class="list-group list-group-flash"><li class="list-group-item bg-dark text-light"><strong>Job Title: </strong>'
+                //         + (result['data'][i]['jobTitle'] == "" ? "Unknown" : result['data'][i]['jobTitle']) + '</li><li class="list-group-item bg-dark text-light"><strong>Email: </strong>' + result['data'][i]['email']
+                //         + '</li><li class="list-group-item bg-dark text-light"><strong>Department:   </strong>' + result['data'][i]['department'] + '</li><li class="list-group-item bg-dark text-light"><strong>City:   </strong>'
+                //         + result['data'][i]['location'] + '</li></ul></div><div class="card-footer"><button id="btn-more" value="'
+                //         + result['data'][i]['lastName'] + " " + result['data'][i]['firstName'] + '" type="button" class="btn btn-success btn-md">Options</button></div></div></div>');
+                // }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR, textStatus, errorThrown);
+                // console.log(jqXHR, textStatus, errorThrown);
             }
         });
     }
 
     //search function
-    $("#search").on("keyup", function () {
+    $("#search").on("keyup keypress", function (e) {
+
+        if (e.keyCode == 13) {
+            e.preventDefault();
+        }
+
         var value = $(this).val().toLowerCase();
+
         $('div[data-role="employee-details"]').filter(function () {
-            $(this).toggle($(this).find('.card-title').text().toLowerCase().indexOf(value) > -1)
+            $(this).toggle($(this).find('.info-text').text().toLowerCase().indexOf(value) > -1)
+        });
+
+        $('div[data-role="department-details"]').filter(function () {
+            $(this).toggle($(this).find('.info-text').text().toLowerCase().indexOf(value) > -1)
+        });
+
+        $('div[data-role="location-details"]').filter(function () {
+            $(this).toggle($(this).find('.info-text').text().toLowerCase().indexOf(value) > -1)
         });
     });
 
@@ -55,10 +89,12 @@ $(document).ready(function () {
                 id: id
             },
             success: function (result) {
-                console.log(result);
+                // console.log(result);
+
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR, textStatus, errorThrown);
+                // console.log(jqXHR, textStatus, errorThrown);
+                // console.warn(jqXHR.responseText);
             }
         });
     }
@@ -77,11 +113,10 @@ $(document).ready(function () {
                 departmentID: departmentID
             },
             success: function (result) {
-                console.log(result);
-                getAll();
+                // console.log(result);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR, textStatus, errorThrown);
+                // console.log(jqXHR, textStatus, errorThrown);
             }
         });
     }
@@ -97,11 +132,28 @@ $(document).ready(function () {
                 locationID: locationID
             },
             success: function (result) {
-                console.log(result);
-                getAll();
+                // console.log(result);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR, textStatus, errorThrown);
+                // console.log(jqXHR, textStatus, errorThrown);
+            }
+        });
+    }
+
+    //delete department from database
+    const deleteDepartment = (id) => {
+        $.ajax({
+            url: "libs/php/deleteDepartmentByID.php",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: id
+            },
+            success: function (result) {
+                // console.log(result);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // console.log(jqXHR, textStatus, errorThrown);
             }
         });
     }
@@ -116,11 +168,28 @@ $(document).ready(function () {
                 name: name
             },
             success: function (result) {
-                console.log(result);
-                getAll();
+                // console.log(result);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR, textStatus, errorThrown);
+                // console.log(jqXHR, textStatus, errorThrown);
+            }
+        });
+    }
+
+    //delete Location from database
+    const deleteLocation = (id) => {
+        $.ajax({
+            url: "libs/php/deleteLocationByID.php",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: id
+            },
+            success: function (result) {
+                // console.log(result);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // console.log(jqXHR, textStatus, errorThrown);
             }
         });
     }
@@ -140,11 +209,52 @@ $(document).ready(function () {
                 depID: departmentID
             },
             success: function (result) {
-                console.log(result);
+                // console.log(result);
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR, textStatus, errorThrown);
+                // console.log(jqXHR, textStatus, errorThrown);
+            }
+        });
+    }
+
+    //update current department details
+    const updateDepartmentDetails = (id, department, locationID) => {
+        $.ajax({
+            url: "libs/php/updateDepartmentDetails.php",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: id,
+                department: department,
+                locationID: locationID
+            },
+            success: function (result) {
+                // console.log(result);
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // console.log(jqXHR, textStatus, errorThrown);
+            }
+        });
+    }
+
+    //update current department details
+    const updateLocationDetails = (id, location) => {
+        $.ajax({
+            url: "libs/php/updateLocationDetails.php",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: id,
+                location: location,
+            },
+            success: function (result) {
+                // console.log(result);
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // console.log(jqXHR, textStatus, errorThrown);
             }
         });
     }
@@ -159,16 +269,55 @@ $(document).ready(function () {
                 id: id
             },
             success: function (result) {
-                console.log(result);
-                $('#updateModal .first-name').val(result['data'][0].firstName);
-                $('#updateModal .last-name').val(result['data'][0].lastName);
-                $('#updateModal .email').val(result['data'][0].email);
-                $('#updateModal .job-title').val(result['data'][0].jobTitle);
-                $('#updateModal .custom-select-department').val(result['data'][0].departmentID);
+                // console.log(result);
+                $('#updateEmployeeModal .first-name').val(result['data'][0].firstName);
+                $('#updateEmployeeModal .last-name').val(result['data'][0].lastName);
+                $('#updateEmployeeModal .email').val(result['data'][0].email);
+                $('#updateEmployeeModal .job-title').val(result['data'][0].jobTitle);
+                $('#updateEmployeeModal .custom-select-department').val(result['data'][0].departmentID);
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR, textStatus, errorThrown);
+                // console.log(jqXHR, textStatus, errorThrown);
+            }
+        });
+    }
+
+    //display department details within update employee modal
+    const showDepartmentDetails = (id) => {
+        $.ajax({
+            url: "libs/php/getDepartmentByID.php",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: id
+            },
+            success: function (result) {
+                // console.log(result);
+                $('#updateDepartmentModal .department-name').val(result['data'][0].name);
+                $('#updateDepartmentModal .custom-select-location').val(result['data'][0].locationID);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // console.log(jqXHR, textStatus, errorThrown);
+            }
+        });
+    }
+
+    //display department details within update employee modal
+    const showLocationDetails = (id) => {
+        $.ajax({
+            url: "libs/php/getLocationByID.php",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: id
+            },
+            success: function (result) {
+                // console.log(result);
+                $('#updateLocationModal .location-name').val(result['data'][0].name);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // console.log(jqXHR, textStatus, errorThrown);
             }
         });
     }
@@ -180,12 +329,14 @@ $(document).ready(function () {
             type: 'GET',
             dataType: 'json',
             success: function (result) {
-                console.log(result);
+                // console.log(result);
+                $('.filter .card-body').empty();
 
                 for (let i = 0; i < result['data'].length; i++) {
-                    $('.filter .card-body').append('<div class="form-check mb-2"> ' +
+                    $('.filter .card-body').append(
+                        '<div class="form-check card-text text-wrap mb-2"> ' +
                         '<input ' +
-                        'class="form-check-input" ' +
+                        'class="form-check-input checkbox-list" ' +
                         'type="checkbox" ' +
                         'id="' + result['data'][i].name + '-Checkbox" ' +
                         'value=' + result['data'][i].id + '> ' +
@@ -197,7 +348,7 @@ $(document).ready(function () {
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR, textStatus, errorThrown);
+                // console.log(jqXHR, textStatus, errorThrown);
             }
         });
     }
@@ -209,14 +360,14 @@ $(document).ready(function () {
             type: 'GET',
             dataType: 'json',
             success: function (result) {
-                console.log(result);
+                // console.log(result);
 
                 for (let i = 0; i < result['data'].length; i++) {
                     $('.custom-select-location').append('<option value=' + result['data'][i].id + '>' + result['data'][i].name + '</option>');
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR, textStatus, errorThrown);
+                // console.log(jqXHR, textStatus, errorThrown);
             }
         });
 
@@ -244,37 +395,38 @@ $(document).ready(function () {
                 depID12: dep12 || 0
             },
             success: function (result) {
-                console.log(result);
+                // console.log(result);
                 $("#info").empty();
-                //col-lg-6 col-md-6 col-12 
+
                 for (let i = 0; i < result['data'].length; i++) {
-                    // col-sm-12 col-md-6 col-lg-4
-                    $('#info').append('<div class="col-sm-12 col-md-6 col-lg-3 card m-3" data-role="employee-details"> ' +
-                        '<div class="card-header card-title"><strong>' + result['data'][i].firstName + ' ' + result['data'][i].lastName + '</strong></div>' +
+                    $('#info').append('<div class="col-sm-12 col-md-6 col-lg-4 mt-3" data-role="employee-details"> ' +
+                        '<div class="card" data-role="employee-details"> ' +
+                        '<div class="card-title font-weight-bold card-header text-center info-text">' + result['data'][i].firstName + ' ' + result['data'][i].lastName + '</div>' +
                         '<div class="card-body">' +
-                        '<div id="info-dep" class="card-title">' + '<strong>Department: </strong>' + result['data'][i].department + '</div>' +
-                        '<div class="card-title">' + '<strong>Email: </strong>' + result['data'][i].email + '</div>' +
-                        '<div class="card-title">' + '<strong>Location: </strong>' + result['data'][i].location + '</div>' +
-                        '<button type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light trash-button" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash"></i></button>' +
-                        '<button type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light edit-button" data-toggle="modal" data-target="#updateModal"><i class="far fa-edit"></i></button>' +
+                        '<div class="card-text info-text m-1">' + '<strong>Department: </strong>' + result['data'][i].department + '</div>' +
+                        '<div class="card-text info-text m-1">' + '<strong>Email: </strong>' + result['data'][i].email + '</div>' +
+                        '<div class="card-text info-text m-1">' + '<strong>Location: </strong>' + result['data'][i].location + '</strong></div>' +
+                        '<button type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light trash-button float-right m-1" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash"></i></button>' +
+                        '<button id="test" type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light edit-button float-right m-1" data-toggle="modal" data-target="#updateEmployeeModal"><i class="far fa-edit"></i></button>' +
+                        '</div>' +
+                        '</div>' +
                         '</div>');
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR, textStatus, errorThrown);
+                // console.log(jqXHR, textStatus, errorThrown);
             }
         });
     }
 
     //sorts the list of record into a certain order
-    $(".nav-item .dropdown-item").click(function () {
+    $(".nav-sort-item .dropdown-item").click(function () {
         $("#info").empty();
-        console.log($(".form-check-input:checkbox:checked").length);
+        // console.log($(".form-check-input:checkbox:checked").length);
         sortValue = $(this).attr('data-value');
 
         if ($(".form-check-input:checkbox:checked").length > 0) {
             // any one is checked
-            console.log("ye");
             filterDepartment(
                 sortValue,
                 checkbox[0],
@@ -294,8 +446,7 @@ $(document).ready(function () {
         }
         else {
             // none is checked
-            console.log("no");
-            getAll(sortValue);
+            displayAllEmployees(sortValue);
         }
     });
 
@@ -312,7 +463,6 @@ $(document).ready(function () {
 
         if ($(".form-check-input:checkbox:checked").length > 0) {
             // any one is checked
-            console.log("ye");
             filterDepartment(
                 sortValue,
                 checkbox[0],
@@ -332,87 +482,297 @@ $(document).ready(function () {
         }
         else {
             // none is checked
-            console.log("no");
-            getAll(sortValue);
+            displayAllEmployees(sortValue);
         }
 
+    });
+
+    //load employee data
+    $("#load-employee").click(function () {
+        $(".nav-sort-item .nav-link").removeClass("disabled");
+        $('.checkbox-list').prop('disabled', false);
+        // console.log("load employee");
+        displayAllEmployees(sortValue);
+    })
+
+    //load department data
+    $("#load-department").click(function () {
+        $(".nav-sort-item .nav-link").addClass("disabled");
+        $('.checkbox-list').prop('disabled', true);
+        console.log("load department");
+        $.ajax({
+            url: "libs/php/getDepartmentDetails.php",
+            type: 'GET',
+            dataType: 'json',
+            data: {
+            },
+            success: function (result) {
+                $("#info").empty();
+                employee = false;
+                department = true;
+                location = false;
+                // console.log(result);
+                for (let i = 0; i < result['data'].length; i++) {
+                    $('#info').append('<div id="department' + result['data'][i].id + '" class="col-sm-12 col-md-6 col-lg-4 mt-3" data-role="department-details"> ' +
+                        '<div class="card" data-role="employee-details"> ' +
+                        '<div class="card-title card-header font-weight-bold text-center info-text">' + result['data'][i].department + '</div>' +
+                        '<div class="card-body">' +
+                        '<div class="card-text info-text m-1">' + '<strong>Location: </strong>' + result['data'][i].location + '</strong></div>' +
+                        '<div class="card-text info-text m-1">' + '<strong>Employees: </strong>' + result['data'][i].employee + '</strong></div>' +
+                        '<button type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light trash-button float-right m-1" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash"></i></button>' +
+                        '<button type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light edit-button float-right m-1" data-toggle="modal" data-target="#updateDepartmentModal"><i class="far fa-edit"></i></button>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>');
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR, textStatus, errorThrown);
+            }
+        });
+    })
+
+    //load location data
+    $("#load-location").click(function () {
+        $(".nav-sort-item .nav-link").addClass("disabled");
+        $('.checkbox-list').prop('disabled', true);
+        $.ajax({
+            url: "libs/php/getLocationDetails.php",
+            type: 'GET',
+            dataType: 'json',
+            data: {
+            },
+            success: function (result) {
+                // console.log(result);
+                // console.log(`employee = ${employee}, department = ${department}, location = ${location}`);
+
+                $("#info").empty();
+                employee = false;
+                department = false;
+                location = true;
+
+                for (let i = 0; i < result['data'].length; i++) {
+                    $('#info').append('<div id="location' + result['data'][i].id + '" class="col-sm-12 col-md-6 col-lg-4 mt-3" data-role="location-details"> ' +
+                        '<div class="card" data-role="employee-details"> ' +
+                        '<div class="card-title card-header font-weight-bold text-center info-text">' + result['data'][i].name + '</div>' +
+                        '<div class="card-body">' +
+                        '<div class="card-text info-text m-1">' + '<strong>Department: </strong>' + result['data'][i].department + '</strong></div>' +
+                        '<div class="card-text info-text m-1">' + '<strong>Employees: </strong>' + result['data'][i].employee + '</strong></div>' +
+                        '<button type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light trash-button float-right m-1" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash"></i></button>' +
+                        '<button id="test" type="button" data-id=' + result['data'][i].id + ' class="btn btn-secondary btn-light edit-button float-right m-1" data-toggle="modal" data-target="#updateLocationModal"><i class="far fa-edit"></i></button>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>');
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR, textStatus, errorThrown);
+            }
+        });
+    })
+
+    //shows employee details within update modal box
+    $(document).on('click', '[data-role="employee-details"] .edit-button', function () {
+        // console.log($(this).data('id'));
+        showEmployeeDetails($(this).data('id'));
+    });
+
+    //shows department details within update modal box
+    $(document).on('click', '[data-role="department-details"] .edit-button', function () {
+        // console.log($(this).data('id'));
+        showDepartmentDetails($(this).data('id'));
+    });
+
+    //shows location details within update modal box
+    $(document).on('click', '[data-role="location-details"] .edit-button', function () {
+        // console.log($(this).data('id'));
+        showLocationDetails($(this).data('id'));
     });
 
     //deletes employee from the database when submitted
     $("#deleteModal").on('shown.bs.modal', function (e) {
         // console.log("off");
-        const deleteId = $(e.relatedTarget).data('id');
-        console.log(deleteId);
+        deleteId = $(e.relatedTarget).data('id');
 
-        $("#delete-employee").click(function () {
-            deleteEmployee(deleteId);
-            console.log(deleteId + " is deleted");
-        });
+        if (employee) {
+            $("#delete-record").removeClass("delete-location");
+            $("#delete-record").removeClass("delete-department");
+            $("#delete-record").addClass("delete-employee");
+
+            console.log("employee modal");
+            $(".delete-employee").click(function () {
+                deleteEmployee(deleteId);
+                $(`#employee${deleteId}`).modal('hide');
+                $("#load-employee").click();
+            });
+
+        } else if (department) {
+            $("#delete-record").removeClass("delete-employee");
+            $("#delete-record").removeClass("delete-location");
+            $("#delete-record").addClass("delete-department");
+
+            console.log("department modal")
+            $(".delete-department").click(function () {
+                deleteDepartment(deleteId);
+                $(`#department${deleteId}`).modal('hide');
+                $("#load-department").click();
+                displayAllDepartments();
+            });
+
+        } else if (location) {
+            $("#delete-record").removeClass("delete-employee");
+            $("#delete-record").removeClass("delete-department");
+            $("#delete-record").addClass("delete-location");
+
+            console.log("location modal")
+            $(".delete-location").click(function () {
+                deleteLocation(deleteId);
+                $(`#location${deleteId}`).modal('hide');
+                $("#load-location").click();
+            });
+
+        }
     });
 
     //adds employee into the databse when submitted
-    $("#add-employee").click(function () {
-        console.log($('#addEmployeeModal .first-name').val());
-        console.log($('#addEmployeeModal .last-name').val());
-        console.log($('#addEmployeeModal .email').val());
-        console.log($('#addEmployeeModal .job-title').val());
-        console.log($('#addEmployeeModal .custom-select-department').val());
+    $("#add-employee").click(function (e) {
+        // console.log($('#addEmployeeModal .first-name').val());
+        // console.log($('#addEmployeeModal .last-name').val());
+        // console.log("email: " + $('#addEmployeeModal .email').val());
+        // console.log("job: " + $('#addEmployeeModal .job-title').val());
+        // console.log($('#addEmployeeModal .custom-select-department').val());
 
-        addEmployee($('#addEmployeeModal .first-name').val(),
-            $('#addEmployeeModal .last-name').val(),
-            $('#addEmployeeModal .email').val(),
-            $('#addEmployeeModal .job-title').val(),
-            $('#addEmployeeModal .custom-select-department').val()
-        );
+        if ($('#addEmployeeModal .first-name').val() !== "" &&
+            $('#addEmployeeModal .last-name').val() !== "" &&
+            $('#addEmployeeModal .email').val() !== "" &&
+            $("#addEmployeeModal .job-title").val() !== "" &&
+            $('#addEmployeeModal .custom-select-department').val() !== "") {
+
+            addEmployee($('#addEmployeeModal .first-name').val(),
+                $('#addEmployeeModal .last-name').val(),
+                $('#addEmployeeModal .email').val(),
+                $('#addEmployeeModal .job-title').val(),
+                $('#addEmployeeModal .custom-select-department').val()
+            );
+
+            // $('#add-employee').attr("data-dismiss","modal");  
+            $('#addEmployeeModal').modal('hide');
+            $("#add-employee-form").trigger("reset");
+            displayAllEmployees(sortValue);
+        }
+
     });
 
     //adds department into the database when submitted
     $("#add-department").click(function () {
-        console.log($('#addDepartmentModal #department-name').val());
-        console.log($('#addDepartmentModal .custom-select-location').val());
-        //displayAllLocations();
+        // console.log($('#addDepartmentModal .department-name').val());
+        // console.log($('#addDepartmentModal .custom-select-location').val());
 
-        addDepartment($('#addDepartmentModal #department-name').val(),
-            $('#addDepartmentModal .custom-select-location').val()
-        );
+        if ($('#addDepartmentModal .department-name').val() !== "" &&
+            $('#addDepartmentModal .custom-select-location').val() !== "") {
+
+            addDepartment($('#addDepartmentModal .department-name').val(),
+                $('#addDepartmentModal .custom-select-location').val()
+            );
+
+            $('#addDepartmentModal').modal('hide');
+            $("#add-department-form").trigger("reset");
+            $("#load-department").click();
+            displayAllDepartments();
+        }
     });
 
     //adds location into the database when submitted
     $("#add-location").click(function () {
-        console.log($('#addLocationModal #location-name').val());
+        console.log($('#addLocationModal .location-name').val());
 
-        addLocation($('#addLocationModal #location-name').val()
-        );
-    });
+        if ($('#addLocationModal .location-name').val() !== "") {
 
-    //shows employee details within update modal box
-    $(document).on('click', '.edit-button', function () {
-        console.log($(this).data('id'));
-        showEmployeeDetails($(this).data('id'));
+            addLocation($('#addLocationModal .location-name').val());
+
+            $('#addLocationModal').modal('hide');
+            $("#add-location-form").trigger("reset");
+            $("#load-location").click();
+        }
     });
 
     //updates employee into the database when submitted
-    $("#updateModal").on('shown.bs.modal', function (e) {
-        // console.log("off");
+    $("#updateEmployeeModal").on('shown.bs.modal', function (e) {
         const updateId = $(e.relatedTarget).data('id');
 
         $("#update-employee").click(function (e) {
-            console.log($('#updateModal .first-name').val());
-            console.log($('#updateModal .last-name').val());
-            console.log($('#updateModal .email').val());
-            console.log($('#updateModal .job-title').val());
-            console.log($('#updateModal .custom-select-department').val());
-            console.log("id: " + updateId);
+            // console.log($('#updateEmployeeModal .first-name').val());
+            // console.log($('#updateEmployeeModal .last-name').val());
+            // console.log($('#updateEmployeeModal .email').val());
+            // console.log($('#updateEmployeeModal .job-title').val());
+            // console.log($('#updateEmployeeModal .custom-select-department').val());
+            // console.log("id: " + updateId);
 
-            updateEmployeeDetails(updateId,
-                $('#updateModal .first-name').val(),
-                $('#updateModal .last-name').val(),
-                $('#updateModal .email').val(),
-                $('#updateModal .job-title').val(),
-                $('#updateModal .custom-select-department').val()
-            );
+            if ($('#updateEmployeeModal .first-name').val() !== "" &&
+                $('#updateEmployeeModal .last-name').val() !== "" &&
+                $('#updateEmployeeModal .email').val() !== "" &&
+                $("#updateEmployeeModal .job-title").val() !== "" &&
+                $('#updateEmployeeModal .custom-select-department').val() !== "") {
 
-            getAll("p.firstName");
+                updateEmployeeDetails(updateId,
+                    $('#updateEmployeeModal .first-name').val(),
+                    $('#updateEmployeeModal .last-name').val(),
+                    $('#updateEmployeeModal .email').val(),
+                    $('#updateEmployeeModal .job-title').val(),
+                    $('#updateEmployeeModal .custom-select-department').val()
+                );
+
+                $('#updateEmployeeModal').modal('hide');
+            }
+
+            displayAllEmployees(sortValue);
+        });
+    });
+
+    //updates department into the database when submitted
+    $("#updateDepartmentModal").on('shown.bs.modal', function (e) {
+        const updateId = $(e.relatedTarget).data('id');
+
+        $("#update-department").click(function () {
+            // console.log($('#updateDepartmentModal .department-name').val());
+            // console.log($('#updateDepartmentModal .custom-select-location').val());
+            // console.log("id: " + updateId);
+
+            if ($('#updateDepartmentModal .department-name').val() !== "" &&
+                $('#updateDepartmentModal .custom-select-location').val() !== "") {
+
+                updateDepartmentDetails(updateId,
+                    $('#updateDepartmentModal .department-name').val(),
+                    $('#updateDepartmentModal .custom-select-location').val()
+                );
+
+                $('#updateDepartmentModal').modal('hide');
+            }
+
+            $("#load-department").click();
+            displayAllDepartments();
+        });
+    });
+
+    //updates loacation into the database when submitted
+    $("#updateLocationModal").on('shown.bs.modal', function (e) {
+        const updateId = $(e.relatedTarget).data('id');
+
+        $("#update-location").click(function () {
+            // console.log($('#updateLocationModal .location-name').val());
+            // console.log("id: " + updateId);
+
+            if ($('#updateLocationModal .location-name').val() !== "") {
+
+                updateLocationDetails(updateId,
+                    $('#updateLocationModal .location-name').val()
+                );
+
+                $('#updateLocationModal').modal('hide');
+                e.preventDefault();
+            }
+
+            $("#load-location").click();
         });
     });
 
@@ -437,9 +797,23 @@ $(document).ready(function () {
             })
     })();
 
-    getAll(sortValue);
+    //scroll to the top of the page
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 50) {
+            $('#back-to-top').fadeIn();
+        } else {
+            $('#back-to-top').fadeOut();
+        }
+    });
+    // scroll body to 0px on click
+    $('#back-to-top').click(function () {
+        $('body,html').animate({
+            scrollTop: 0
+        }, 400);
+        return false;
+    });
+
+    displayAllEmployees(sortValue);
     displayAllLocations();
     displayAllDepartments();
-
 });
-

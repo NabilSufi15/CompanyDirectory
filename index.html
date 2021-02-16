@@ -19,8 +19,8 @@
   </head>
   <body>
     <!-- Nav Bar -->
-
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- navbar-light bg-light -->
+    <nav class="navbar navbar-expand-lg navbar-light">
       <a class="navbar-brand" href="#">Company Directory</a>
       <button
         class="navbar-toggler"
@@ -39,7 +39,7 @@
           <li class="nav-item">
             <button
               type="button"
-              class="btn btn-secondary btn-light"
+              class="btn"
               data-toggle="modal"
               data-target="#addEmployeeModal"
             >
@@ -49,7 +49,7 @@
           <li class="nav-item">
             <button
               type="button"
-              class="btn btn-secondary btn-light"
+              class="btn"
               data-toggle="modal"
               data-target="#addDepartmentModal"
             >
@@ -59,7 +59,7 @@
           <li class="nav-item">
             <button
               type="button"
-              class="btn btn-secondary btn-light"
+              class="btn"
               data-toggle="modal"
               data-target="#addLocationModal"
             >
@@ -68,6 +68,25 @@
           </li>
 
           <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Records
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a id="load-employee" class="dropdown-item">Employees</a>
+              <a id="load-department" class="dropdown-item">Department</a>
+              <a id="load-location" class="dropdown-item">Location</a>
+            </div>
+          </li>
+
+          <li class="nav-sort-item dropdown">
             <a
               class="nav-link dropdown-toggle"
               href="#"
@@ -92,7 +111,7 @@
             </div>
           </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
+        <form class="form-inline my-2 my-lg-0 justify-content-center">
           <input
             id="search"
             class="form-control mr-sm-2"
@@ -105,18 +124,29 @@
     </nav>
 
     <!-- Container -->
-    <div class="container row col-lg-12">
-      <div class="filter col-lg-2">
+    <div class="container-fluid row ml-0">
+      <div class="filter col-lg-2 mt-3">
         <div class="card">
-          <div class="card-header">
-            <p>Filter</p>
+          <div
+            class="card-title font-weight-bold card-header text-center info-text"
+          >
+            Filter
           </div>
-          <div class="card-body"></div>
+          <div class="card-body bg-transparent"></div>
         </div>
       </div>
+
       <div class="col-lg-10">
         <div id="info" class="row"></div>
       </div>
+
+      <a
+        id="back-to-top"
+        href="#"
+        class="btn btn-light btn-lg back-to-top"
+        role="button"
+        ><i class="fas fa-chevron-up"></i
+      ></a>
     </div>
 
     <!--Delete Modal -->
@@ -151,9 +181,9 @@
               No
             </button>
             <button
-              id="delete-employee"
+              id="delete-record"
               type="button"
-              class="btn btn-primary"
+              class="btn btn-primary delete-employee"
               data-dismiss="modal"
             >
               Yes
@@ -163,10 +193,10 @@
       </div>
     </div>
 
-    <!--Update Modal -->
+    <!--Update Employee Modal -->
     <div
       class="modal fade"
-      id="updateModal"
+      id="updateEmployeeModal"
       tabindex="-1"
       role="dialog"
       aria-labelledby="exampleModalLabel"
@@ -176,102 +206,6 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Update Record</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form class="needs-validation" novalidate>
-              <div class="form-group">
-                <label for="first-name" class="col-form-label"
-                  >First Name:</label
-                >
-                <input
-                  type="text"
-                  class="form-control first-name"
-                  required
-                />
-                <div class="invalid-feedback">Please enter your First Name</div>
-              </div>
-              <div class="form-group">
-                <label for="last-name" class="col-form-label">Last Name:</label>
-                <input
-                  type="text"
-                  class="form-control last-name"
-                  required
-                />
-                <div class="invalid-feedback">Please enter your Last Name</div>
-              </div>
-              <div class="form-group">
-                <label for="email" class="col-form-label">Email:</label>
-                <input type="text" class="form-control email" required />
-                <div class="invalid-feedback">Please enter your Email</div>
-              </div>
-              <div class="form-group">
-                <label for="email" class="col-form-label">Job Title:</label>
-                <input
-                  type="text"
-                  class="form-control job-title"
-                  required
-                />
-                <div class="invalid-feedback">Please enter your Job Title</div>
-              </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="department"
-                    >Department</label
-                  >
-                </div>
-                <select
-                  class="custom-select custom-select-department"
-                  required
-                >
-                  <option selected disabled value="">
-                    Select a Department...
-                  </option>
-                </select>
-                <div class="invalid-feedback">Please select a Department</div>
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Cancel
-                </button>
-                <button
-                  id="update-employee"
-                  type="submit"
-                  class="btn btn-primary"
-                >
-                  Update
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!--Add Employee Modal -->
-    <div
-      class="modal fade"
-      id="addEmployeeModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Register Record</h5>
             <button
               type="button"
               class="close"
@@ -326,6 +260,87 @@
                 >
                   Cancel
                 </button>
+                <button
+                  id="update-employee"
+                  type="submit"
+                  class="btn btn-primary"
+                >
+                  Update
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Add Employee Modal -->
+    <div
+      class="modal fade"
+      id="addEmployeeModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Register Record</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="add-employee-form" class="needs-validation" novalidate>
+              <div class="form-group">
+                <label for="first-name" class="col-form-label"
+                  >First Name:</label
+                >
+                <input type="text" class="form-control first-name" required />
+                <div class="invalid-feedback">Please enter your First Name</div>
+              </div>
+              <div class="form-group">
+                <label for="last-name" class="col-form-label">Last Name:</label>
+                <input type="text" class="form-control last-name" required />
+                <div class="invalid-feedback">Please enter your Last Name</div>
+              </div>
+              <div class="form-group">
+                <label for="email" class="col-form-label">Email:</label>
+                <input type="text" class="form-control email" required />
+                <div class="invalid-feedback">Please enter your Email</div>
+              </div>
+              <div class="form-group">
+                <label for="email" class="col-form-label">Job Title:</label>
+                <input type="text" class="form-control job-title" required />
+                <div class="invalid-feedback">Please enter your Job Title</div>
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="department"
+                    >Department</label
+                  >
+                </div>
+                <select class="custom-select custom-select-department" required>
+                  <option selected disabled value="">
+                    Select a Department...
+                  </option>
+                </select>
+                <div class="invalid-feedback">Please select a Department</div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Cancel
+                </button>
                 <button id="add-employee" type="submit" class="btn btn-primary">
                   Add
                 </button>
@@ -336,7 +351,7 @@
       </div>
     </div>
 
-    <!--Department Modal -->
+    <!-- Add Department Modal -->
     <div
       class="modal fade"
       id="addDepartmentModal"
@@ -359,15 +374,14 @@
             </button>
           </div>
           <div class="modal-body">
-            <form class="needs-validation" novalidate>
+            <form id="add-department-form" class="needs-validation" novalidate>
               <div class="form-group">
                 <label for="department-name" class="col-form-label"
                   >Department Name:</label
                 >
                 <input
                   type="text"
-                  class="form-control"
-                  id="department-name"
+                  class="form-control department-name"
                   required
                 />
                 <div class="invalid-feedback">Please enter department name</div>
@@ -378,11 +392,7 @@
                     >Location</label
                   >
                 </div>
-                <select
-                  class="custom-select custom-select-location"
-                  id="select-location"
-                  required
-                >
+                <select class="custom-select custom-select-location" required>
                   <option selected disabled value="">Select Location...</option>
                 </select>
                 <div class="invalid-feedback">Please select a location</div>
@@ -401,6 +411,74 @@
                   class="btn btn-primary"
                 >
                   Add
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Department Modal -->
+    <div
+      class="modal fade"
+      id="updateDepartmentModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Department</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form class="needs-validation" novalidate>
+              <div class="form-group">
+                <label for="department-name" class="col-form-label"
+                  >Department Name:</label
+                >
+                <input
+                  type="text"
+                  class="form-control department-name"
+                  required
+                />
+                <div class="invalid-feedback">Please enter department name</div>
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="location"
+                    >Location</label
+                  >
+                </div>
+                <select class="custom-select custom-select-location" required>
+                  <option selected disabled value="">Select Location...</option>
+                </select>
+                <div class="invalid-feedback">Please select a location</div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Cancel
+                </button>
+                <button
+                  id="update-department"
+                  type="submit"
+                  class="btn btn-primary"
+                >
+                  Update
                 </button>
               </div>
             </form>
@@ -432,15 +510,14 @@
             </button>
           </div>
           <div class="modal-body">
-            <form class="needs-validation" novalidate>
+            <form id="add-location-form" class="needs-validation" novalidate>
               <div class="form-group">
                 <label for="first-name" class="col-form-label"
                   >Location Name:</label
                 >
                 <input
                   type="text"
-                  class="form-control"
-                  id="location-name"
+                  class="form-control location-name"
                   required
                 />
                 <div class="invalid-feedback">Please select a location</div>
@@ -455,6 +532,63 @@
                 </button>
                 <button id="add-location" type="submit" class="btn btn-primary">
                   Add
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Edit Location Modal -->
+    <div
+      class="modal fade"
+      id="updateLocationModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Update Location</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form class="needs-validation" novalidate>
+              <div class="form-group">
+                <label for="first-name" class="col-form-label"
+                  >Location Name:</label
+                >
+                <input
+                  type="text"
+                  class="form-control location-name"
+                  required
+                />
+                <div class="invalid-feedback">Please select a location</div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Cancel
+                </button>
+                <button
+                  id="update-location"
+                  type="submit"
+                  class="btn btn-primary"
+                >
+                  Update
                 </button>
               </div>
             </form>

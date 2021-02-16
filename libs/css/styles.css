@@ -1,1 +1,68 @@
+/* background-color: f6f6f8
+   header: #c60021
+   nav: e3e3e3
+ */
+body,
+.card {
+  background-color: #f6f6f8 !important;
+  /* margin-top: 65px;  */
+}
 
+nav > a,
+.nav-link {
+  color: black;
+}
+
+/* #f8e5e5  #fa255e*/
+.card {
+  box-shadow: 0.5px 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.card-title {
+  color: white;
+}
+
+.card-header {
+  background-color: #c60021 !important;
+}
+
+.card {
+  background-color: #e3e3e3 !important;
+}
+
+.navbar {
+  background-color: #e3e3e3;
+  box-shadow: 0.5px 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+button {
+  transition-duration: 0.4s;
+}
+
+button:hover {
+  background-color: #c60021 !important;
+  color: white !important;
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  display: none;
+}
+
+.trash-button,
+.edit-button {
+  box-shadow: 0.5px 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  display: none;
+}
+
+.fa-chevron-up{
+  color: #c60021;
+}
