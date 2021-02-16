@@ -7,7 +7,7 @@
 	// $cd_password = ""; // password
 	// $cd_dbname = "company_directory"; // database name
 
-	//Development Connection
+	//Remote Connection
 	$cd_host = "eu-cdbr-west-03.cleardb.net";
 	$cd_port = 3306;
 	$cd_socket = "";
