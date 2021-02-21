@@ -685,8 +685,8 @@ $(document).ready(function () {
 
             addLocation($('#addLocationModal .location-name').val());
 
-            $("#load-location").click();
             displayAllLocations();
+            $("#load-location").click();
 
             $('#addLocationModal').modal('hide');
             $("#add-location-form").trigger("reset");
@@ -744,15 +744,15 @@ $(document).ready(function () {
                     $('#updateDepartmentModal .custom-select-location').val()
                 );
                 
+                displayAllDepartments();
+                
                 $("#load-department").click();
                 $('#updateDepartmentModal').modal('hide');
-                // e.preventDefault();
+        
             }
 
+            
         });
-
-        $("#load-department").click();
-        displayAllDepartments();
     });
 
     //updates loacation into the database when submitted
@@ -768,6 +768,8 @@ $(document).ready(function () {
                 updateLocationDetails(updateId,
                     $('#updateLocationModal .location-name').val()
                 );
+
+                displayAllLocations();
 
                 $('#updateLocationModal').modal('hide');
                 $("#load-location").click();
