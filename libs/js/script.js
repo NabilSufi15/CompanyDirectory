@@ -90,7 +90,7 @@ $(document).ready(function () {
     }
 
     //add employee into database
-    const addEmployee = (firstName, lastName, email, jobTitle, departmentID) => {
+    const addEmployee = (firstName, lastName, jobTitle, email, departmentID) => {
         $.ajax({
             url: "libs/php/insertEmployee.php",
             type: 'POST',
@@ -98,8 +98,8 @@ $(document).ready(function () {
             data: {
                 firstName: firstName,
                 lastName: lastName,
-                email: email,
                 jobTitle: jobTitle,
+                email: email,
                 departmentID: departmentID
             },
             success: function (result) {
@@ -199,7 +199,7 @@ $(document).ready(function () {
                 depID: departmentID
             },
             success: function (result) {
-                // console.log(result);
+                console.log(result);
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -259,7 +259,7 @@ $(document).ready(function () {
                 id: id
             },
             success: function (result) {
-                // console.log(result);
+                console.log(result);
                 $('#updateEmployeeModal .first-name').val(result['data'][0].firstName);
                 $('#updateEmployeeModal .last-name').val(result['data'][0].lastName);
                 $('#updateEmployeeModal .email').val(result['data'][0].email);
@@ -321,6 +321,7 @@ $(document).ready(function () {
             success: function (result) {
                 // console.log(result);
                 $('.filter .card-body').empty();
+                $('.custom-select-department').html('');
 
                 for (let i = 0; i < result['data'].length; i++) {
                     $('.filter .card-body').append(
@@ -351,6 +352,8 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (result) {
                 // console.log(result);
+
+                $('.custom-select-location').html('');
 
                 for (let i = 0; i < result['data'].length; i++) {
                     $('.custom-select-location').append('<option value=' + result['data'][i].id + '>' + result['data'][i].name + '</option>');
@@ -587,9 +590,10 @@ $(document).ready(function () {
             $("#delete-record").addClass("delete-employee");
 
             $(".delete-employee").click(function () {
+                displayAllEmployees(sortValue);
+
                 deleteEmployee(deleteId);
                 $(`#employee${deleteId}`).modal('hide');
-                $("#load-employee").click();
             });
 
             //deletes department from the database when submitted
@@ -599,10 +603,11 @@ $(document).ready(function () {
             $("#delete-record").addClass("delete-department");
 
             $(".delete-department").click(function () {
+                displayAllDepartments();
+                $("#load-department").click();
+
                 deleteDepartment(deleteId);
                 $(`#department${deleteId}`).modal('hide');
-                $("#load-department").click();
-                displayAllDepartments();
             });
 
             //deletes location from the database when submitted
@@ -612,9 +617,11 @@ $(document).ready(function () {
             $("#delete-record").addClass("delete-location");
 
             $(".delete-location").click(function () {
+                displayAllLocations();
+                $("#load-location").click();
+
                 deleteLocation(deleteId);
                 $(`#location${deleteId}`).modal('hide');
-                $("#load-location").click();
             });
 
         }
@@ -630,7 +637,7 @@ $(document).ready(function () {
 
         if ($('#addEmployeeModal .first-name').val() !== "" &&
             $('#addEmployeeModal .last-name').val() !== "" &&
-            $('#addEmployeeModal .email').val() !== "" &&
+            $('#addEmployeeModal .email').val().indexOf('@') > -1 &&
             $("#addEmployeeModal .job-title").val() !== "" &&
             $('#addEmployeeModal .custom-select-department').val() !== "") {
 
@@ -641,10 +648,11 @@ $(document).ready(function () {
                 $('#addEmployeeModal .custom-select-department').val()
             );
 
+            displayAllEmployees(sortValue);
+
             // $('#add-employee').attr("data-dismiss","modal");  
             $('#addEmployeeModal').modal('hide');
             $("#add-employee-form").trigger("reset");
-            displayAllEmployees(sortValue);
         }
 
     });
@@ -661,10 +669,11 @@ $(document).ready(function () {
                 $('#addDepartmentModal .custom-select-location').val()
             );
 
-            $('#addDepartmentModal').modal('hide');
-            $("#add-department-form").trigger("reset");
             $("#load-department").click();
             displayAllDepartments();
+
+            $('#addDepartmentModal').modal('hide');
+            $("#add-department-form").trigger("reset");
         }
     });
 
@@ -676,9 +685,12 @@ $(document).ready(function () {
 
             addLocation($('#addLocationModal .location-name').val());
 
+            $("#load-location").click();
+            displayAllLocations();
+
             $('#addLocationModal').modal('hide');
             $("#add-location-form").trigger("reset");
-            $("#load-location").click();
+
         }
     });
 
@@ -687,16 +699,16 @@ $(document).ready(function () {
         const updateId = $(e.relatedTarget).data('id');
 
         $("#update-employee").click(function (e) {
-            // console.log($('#updateEmployeeModal .first-name').val());
-            // console.log($('#updateEmployeeModal .last-name').val());
-            // console.log($('#updateEmployeeModal .email').val());
-            // console.log($('#updateEmployeeModal .job-title').val());
-            // console.log($('#updateEmployeeModal .custom-select-department').val());
-            // console.log("id: " + updateId);
+            console.log($('#updateEmployeeModal .first-name').val());
+            console.log($('#updateEmployeeModal .last-name').val());
+            console.log($('#updateEmployeeModal .email').val());
+            console.log($('#updateEmployeeModal .job-title').val());
+            console.log($('#updateEmployeeModal .custom-select-department').val());
+            console.log("id: " + updateId);
 
             if ($('#updateEmployeeModal .first-name').val() !== "" &&
                 $('#updateEmployeeModal .last-name').val() !== "" &&
-                $('#updateEmployeeModal .email').val() !== "" &&
+                $('#updateEmployeeModal .email').val().indexOf('@') > -1 &&
                 $("#updateEmployeeModal .job-title").val() !== "" &&
                 $('#updateEmployeeModal .custom-select-department').val() !== "") {
 
@@ -719,7 +731,7 @@ $(document).ready(function () {
     $("#updateDepartmentModal").on('shown.bs.modal', function (e) {
         const updateId = $(e.relatedTarget).data('id');
 
-        $("#update-department").click(function () {
+        $("#update-department").click(function (e) {
             // console.log($('#updateDepartmentModal .department-name').val());
             // console.log($('#updateDepartmentModal .custom-select-location').val());
             // console.log("id: " + updateId);
@@ -731,13 +743,16 @@ $(document).ready(function () {
                     $('#updateDepartmentModal .department-name').val(),
                     $('#updateDepartmentModal .custom-select-location').val()
                 );
-
+                
+                $("#load-department").click();
                 $('#updateDepartmentModal').modal('hide');
+                // e.preventDefault();
             }
 
-            $("#load-department").click();
-            displayAllDepartments();
         });
+
+        $("#load-department").click();
+        displayAllDepartments();
     });
 
     //updates loacation into the database when submitted
